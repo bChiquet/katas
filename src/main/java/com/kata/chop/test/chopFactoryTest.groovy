@@ -4,8 +4,7 @@ import com.kata.chop.impl.chopFactory
 import org.junit.Assert
 import org.junit.Test
 
-class chopFactoryTest {
-
+public class chopFactoryTest {
     @Test
     void testCorrectMatch(){
         assertForValueAndList(3, 5, [1,2,3,5,8,13,21])
@@ -27,30 +26,86 @@ class chopFactoryTest {
         assertForValueAndList(7, 25, [1,2,3,4,6,9,12,25])
     }
 
+    @Test
+    void testExceptionOnEmptyArray(){
+        assertErrorForValueAndList(chopFactory.emptyArrayException, 1, [])
+    }
 
-    @Test (expected = chopFactory.valueNotInArrayException.class)
+    @Test
     void testExceptionOnValueNotInList(){
-        assertForValueAndList(2, 4, [2,3,5,6])
+        assertErrorForValueAndList(chopFactory.valueNotInArrayException, 4, [2,3,5,6])
     }
 
-    @Test(expected = chopFactory.emptyArrayException.class)
-    void testExceptionOnValueNotInList2(){
-        assertForValueAndList(2, 1, [])
-    }
-
-    @Test(expected = chopFactory.valueNotInArrayException.class)
+    @Test
     void testExceptionOnValueNotInList3(){
-        assertForValueAndList(2, 2, [0, 1])
+        assertErrorForValueAndList(chopFactory.valueNotInArrayException, 2, [0, 1])
     }
-    @Test(expected = chopFactory.valueNotInArrayException.class)
+    @Test
     void testExceptionOnValueNotInList4(){
-        assertForValueAndList(2, 2, [3, 4])
+        assertErrorForValueAndList(chopFactory.valueNotInArrayException, 2, [3, 4])
     }
 
-    // TODO find a way to enrich unexpected exceptions.
     static void assertForValueAndList(int integerPositionInList, int desiredInteger, List<Integer> integerArray){
-        Assert.assertEquals("recursiveBinaryChop",integerPositionInList, chopFactory.recursiveBinaryChop(desiredInteger, integerArray))
-        Assert.assertEquals("blandBinaryChop",integerPositionInList, chopFactory.blandBinaryChop(desiredInteger, integerArray))
-        Assert.assertEquals("destructiveBinaryChop", integerPositionInList, chopFactory.destructiveBinaryChop(desiredInteger, integerArray))
+        Assert.assertEquals(integerPositionInList, chopFactory.recursiveBinaryChop(desiredInteger, integerArray))
+        Assert.assertEquals(integerPositionInList, chopFactory.blandBinaryChop(desiredInteger, integerArray))
+        Assert.assertEquals(integerPositionInList, chopFactory.destructiveBinaryChop(desiredInteger, integerArray))
+        //Assert.assertEquals(integerPositionInList, chopFactory.simpleBinaryChop(desiredInteger, integerArray))
+        Assert.assertEquals(integerPositionInList, chopFactory.libraryBinaryChop(desiredInteger, new TreeSet<Integer>(integerArray)))
+    }
+
+    static void assertErrorForValueAndList(Class <Exception> desiredException, int desiredInteger, List<Integer> integerArray){
+        //Tried ExpectedException but that will catch any number of exceptions after the expects(), effectively making
+        //it fail just like @Test(expected=x.class). Back to try...catch... :-(
+        //Didn't find good things in assertJ.
+        //Cool stuff exists for java 8 tho.
+        boolean thrown = false
+        try {
+            chopFactory.recursiveBinaryChop(desiredInteger, integerArray)
+        }
+        catch(Exception actualException){
+            Assert.assertEquals(desiredException, actualException.class)
+            thrown = true
+        }
+        Assert.assertTrue(thrown)
+        thrown = false
+        try {
+            chopFactory.blandBinaryChop(desiredInteger, integerArray)
+        }
+        catch(Exception actualException){
+            Assert.assertEquals(desiredException, actualException.class)
+            thrown = true
+        }
+        Assert.assertTrue(thrown)
+        thrown = false
+        try {
+            chopFactory.destructiveBinaryChop(desiredInteger, integerArray)
+        }
+        catch(Exception actualException){
+            Assert.assertEquals(desiredException, actualException.class)
+            thrown = true
+        }
+        Assert.assertTrue(thrown)
+//        thrown = false
+//        try {
+//            //chopFactory.simpleBinaryChop(desiredInteger, integerArray)
+//        }
+//        catch(Exception actualException){
+//            Assert.assertEquals(desiredException, actualException.class)
+//            thrown = true
+//        }
+//        Assert.assertTrue(thrown)
+//        thrown = false
+//        try {
+//            chopFactory.libraryBinaryChop(desiredInteger, new TreeSet<Integer>(integerArray))
+//        }
+//        catch(Exception actualException){
+//            Assert.assertEquals(desiredException, actualException.class)
+//            thrown = true
+//        }
+//        Assert.assertTrue(thrown)
+    }
+
+    static void assertErrorForValueAndListWithJ8(Class <Exception> desiredException, int desiredInteger, List<Integer> integerArray){
+
     }
 }

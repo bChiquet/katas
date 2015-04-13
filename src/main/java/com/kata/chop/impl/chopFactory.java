@@ -1,5 +1,6 @@
 package com.kata.chop.impl;
 
+import java.util.SortedSet;
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class chopFactory {
 
     // Day three implementation : For this day we gradually get rid of whatever in the list is not relevant to us.
     // Not sure that's a very good idea performance wise, but it's quite easy to understand.
-    // TODO : check what ressource subList consumes.
+    // TO-DONE : check what ressource subList consumes. http://java-performance.info/arraylist-performance/
     public static int destructiveBinaryChop(int integerLookedFor, List<Integer> integerList)
             throws emptyArrayException, valueNotInArrayException {
         ckeckIfListIsChoppable(integerList);
@@ -88,5 +89,33 @@ public class chopFactory {
             return finalPos;
         }
         else throw new valueNotInArrayException();
+    }
+
+    //Day four implementation
+    //TODO make it work
+    public static int simpleBinaryChop(int integerLookedFor, List<Integer> integerList)
+            throws emptyArrayException, valueNotInArrayException {
+        ckeckIfListIsChoppable(integerList);
+        int listSize = integerList.size();
+        int lookingAt = listSize/2;
+        for(int iterationNumber= 1; iterationNumber <Math.log(listSize)/Math.log(2) ; iterationNumber++){
+            if (integerLookedFor == integerList.get(lookingAt)){
+                return lookingAt;
+            }
+            else if (integerLookedFor > integerList.get(lookingAt)){
+
+                lookingAt +=lookingAt/2;
+            }
+            else {
+                lookingAt-= 1;
+            }
+        }
+        throw new valueNotInArrayException();
+    }
+
+    //Day five implementation : Or, you know, the easy way...
+    //TODO find out why tests don't crash when no error is sent
+    public static int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerList){
+        return integerList.headSet(integerLookedFor).size();
     }
 }
