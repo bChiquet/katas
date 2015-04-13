@@ -68,6 +68,12 @@ public class chopFactory {
             throw new emptyArrayException();
         }
     }
+    public static void ckeckIfSetIsChoppable(SortedSet<Integer> integerSet)
+            throws emptyArrayException {
+        if (integerSet.size()==0){
+            throw new emptyArrayException();
+        }
+    }
 
     // Day three implementation : For this day we gradually get rid of whatever in the list is not relevant to us.
     // Not sure that's a very good idea performance wise, but it's quite easy to understand.
@@ -113,9 +119,15 @@ public class chopFactory {
         throw new valueNotInArrayException();
     }
 
-    //Day five implementation : Or, you know, the easy way...
-    //TODO find out why tests don't crash when no error is sent
-    public static int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerList){
-        return integerList.headSet(integerLookedFor).size();
+    //Day five implementation : Or we could use an object that is designed for that use, although chopping now barely makes sense.
+    public static int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerSet)
+            throws emptyArrayException, valueNotInArrayException{
+        ckeckIfSetIsChoppable(integerSet);
+        if (integerSet.contains(integerLookedFor)) {
+            return integerSet.headSet(integerLookedFor).size();
+        }
+        else {
+            throw new valueNotInArrayException();
+        }
     }
 }

@@ -94,15 +94,16 @@ public class chopFactoryTest {
 //            thrown = true
 //        }
 //        Assert.assertTrue(thrown)
-//        thrown = false
-//        try {
-//            chopFactory.libraryBinaryChop(desiredInteger, new TreeSet<Integer>(integerArray))
-//        }
-//        catch(Exception actualException){
-//            Assert.assertEquals(desiredException, actualException.class)
-//            thrown = true
-//        }
-//        Assert.assertTrue(thrown)
+        thrown = false
+        try {
+            System.out.println(chopFactory.libraryBinaryChop(desiredInteger, new TreeSet<Integer>(integerArray)));
+
+        }
+        catch(Exception actualException){
+            Assert.assertEquals(desiredException, actualException.class)
+            thrown = true
+        }
+        Assert.assertTrue(thrown)
     }
 
     static void assertErrorForValueAndListWithJ8(Class <Exception> desiredException, int desiredInteger, List<Integer> integerArray){
