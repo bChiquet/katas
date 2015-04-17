@@ -7,7 +7,7 @@ import java.util.List;
  * Kata implementing binary chop
  * http://codekata.com/kata/kata02-karate-chop/
  **/
-public class chopFactory {
+public class binaryChopMethods {
     public static class valueNotInArrayException extends Exception{}
     public static class emptyArrayException extends Exception{}
     public static class listNotOrderedException extends Exception{} //TODO find what to do with this
@@ -24,12 +24,13 @@ public class chopFactory {
         if (integerList.get(0).equals(integerLookedFor)){
             return 0;
         }
-        if (integerLookedFor < integerList.get(integerList.size()/2)){
-            return recursiveBinaryChop(integerLookedFor, integerList.subList(0, integerList.size()/2));
+        int middleOfList = integerList.size()/2;
+        if (integerLookedFor < integerList.get(middleOfList)){
+            return recursiveBinaryChop(integerLookedFor, integerList.subList(0, middleOfList));
         }
         else {
-            return recursiveBinaryChop(integerLookedFor, integerList.subList(integerList.size()/2, integerList.size()))
-                    + (integerList.size()/2);
+            return recursiveBinaryChop(integerLookedFor, integerList.subList(middleOfList, integerList.size()))
+                    + middleOfList;
         }
     }
 
@@ -61,7 +62,7 @@ public class chopFactory {
 
     // Day three : Maybe we should use aspect-oriented magic to avoid duplicating the list size
     // checking code in all of our chop functions...
-    // We could add a method to check if the list is ordered, but since this basically is O(n) for an O(log(n)) method...
+    // We could check if our list is ordered, but since that's O(n), for an O(log(n)) operation it sounds dumb.
     public static void ckeckIfListIsChoppable(List<Integer> integerList)
             throws emptyArrayException {
         if (integerList.size()==0){
@@ -97,29 +98,34 @@ public class chopFactory {
         else throw new valueNotInArrayException();
     }
 
-    //Day four implementation
-    //TODO make it work
+    //Day four implementation.
+    // We expect O(log(list size)) comparisons so if we don't find after that many steps we just assume it's not there.
+    //Not very readable.
+    // Also Java rounds ints in a strange fashion. We should never implicitly expect Java to round ints correctly.
     public static int simpleBinaryChop(int integerLookedFor, List<Integer> integerList)
             throws emptyArrayException, valueNotInArrayException {
         ckeckIfListIsChoppable(integerList);
-        int listSize = integerList.size();
-        int lookingAt = listSize/2;
-        for(int iterationNumber= 1; iterationNumber <Math.log(listSize)/Math.log(2) ; iterationNumber++){
-            if (integerLookedFor == integerList.get(lookingAt)){
+        int lookingAt = integerList.size()/2;
+        int shiftView = integerList.size()/2;
+        for (int i=0;i<=Math.log10(integerList.size())/Math.log10(2);i++) {
+            //Edge case : list of size = 2, integer above top list value.
+            if (lookingAt==integerList.size()){break;}
+            shiftView = (int)Math.ceil(shiftView/2.0);
+            if (integerList.get(lookingAt) == integerLookedFor){
                 return lookingAt;
             }
-            else if (integerLookedFor > integerList.get(lookingAt)){
-
-                lookingAt +=lookingAt/2;
+            else if (integerList.get(lookingAt) < integerLookedFor){
+                lookingAt += shiftView;
             }
             else {
-                lookingAt-= 1;
+                lookingAt -= shiftView;
             }
         }
         throw new valueNotInArrayException();
     }
 
-    //Day five implementation : Or we could use an object that is designed for that use, although chopping now barely makes sense.
+    //Day five implementation : Why not just use an object that is designed for that use ?
+    // Although chopping now barely makes sense, since sortedSets abstract the underlying array.
     public static int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerSet)
             throws emptyArrayException, valueNotInArrayException{
         ckeckIfSetIsChoppable(integerSet);
