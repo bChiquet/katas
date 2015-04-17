@@ -139,7 +139,7 @@ public class binaryChopMethodsTest {
     }
 
     //Because fuck java, right ?
-    //We could also do this with Java8 and currying, but groovy syntax is clearer.
+    //We could also do this with Java8 and currying, but groovy syntax is clearer...
     static void assertErrorForValueAndList_NowWithGroovyFunctionPointer(Class <Exception> desiredException, int desiredInteger, List<Integer> integerArray){
         wrapsChopAndCatchesException desiredException, {binaryChopMethods.recursiveBinaryChop(desiredInteger, integerArray)}
         wrapsChopAndCatchesException desiredException, {binaryChopMethods.blandBinaryChop(desiredInteger, integerArray)}
