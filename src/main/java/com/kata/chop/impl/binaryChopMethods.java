@@ -126,6 +126,8 @@ public class binaryChopMethods {
 
     //Day five implementation : Why not just use an object that is designed for that use ?
     // Although chopping now barely makes sense, since sortedSets abstract the underlying array.
+    //After thinking about it, while the recursive function is the clearest of the above functions (to me), using the
+    //language's go-to object wins the contest any day.
     public static int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerSet)
             throws emptyArrayException, valueNotInArrayException{
         ckeckIfSetIsChoppable(integerSet);

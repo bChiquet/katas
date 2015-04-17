@@ -89,7 +89,7 @@ public class binaryChopMethodsTest {
         //Tried ExpectedException but that will catch any number of exceptions after the expects(), effectively making
         //it fail just like @Test(expected=x.class). Back to try...catch... :-(
         //Didn't find good things in assertJ.
-        //Cool stuff exists for that in the Catch-exception lib.
+        //Cool stuff exists for that in the Catch-exception lib. But who wants more frameworks... Eugene certainly doesn't.
         boolean thrown = false
         try {
             binaryChopMethods.recursiveBinaryChop(desiredInteger, integerArray)
