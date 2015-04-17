@@ -149,9 +149,9 @@ public class binaryChopMethodsTest {
 
     }
 
-    static wrapsChopAndCatchesException(desiredException, actualOutput){
+    static wrapsChopAndCatchesException(desiredException, testedChopFunction){
         try {
-            actualOutput()
+            testedChopFunction()
         }
         catch(Exception actualException){
             Assert.assertEquals desiredException, actualException.class
