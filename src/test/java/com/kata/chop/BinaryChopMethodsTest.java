@@ -1,6 +1,5 @@
 package com.kata.chop;
 
-import com.kata.chop.BinaryChopMethods;
 import org.junit.Assert;
 import org.junit.Test;
 
