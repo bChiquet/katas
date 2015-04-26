@@ -16,9 +16,7 @@ public class FootballUsingAgnosticData {
         public int goalsScored;
         public int goalsTaken;
 
-
-
-        public TeamScoreInfo withValues(String[] dataValues) {
+        public GenericData<T> withValues(String[] dataValues) {
             this.teamName = dataValues[FOOTBALL_TEAM_FIELD];
             this.goalsScored = Integer.parseInt(dataValues[GOALS_SCORED_FIELD]);
             this.goalsTaken =  Integer.parseInt(dataValues[GOALS_TAKEN_FIELD]);
@@ -29,7 +27,7 @@ public class FootballUsingAgnosticData {
     AgnosticData footballData;
 
     FootballUsingAgnosticData(String filePath){
-        footballData = new AgnosticData(filePath, TeamScoreInfo.class);
+        footballData = new AgnosticData<TeamScoreInfo>(filePath, TeamScoreInfo.class);
     }
 
     String getTeamWithSmallestScoredTakenDifference(){
