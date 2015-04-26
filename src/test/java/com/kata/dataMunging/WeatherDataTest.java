@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class WeatherDataTest {
     public static final String PATH_TO_DATA = "C:\\Users\\Py\\IdeaProjects\\katas\\src\\test\\ressources\\weather.dat";
     WeatherData weatherData;
