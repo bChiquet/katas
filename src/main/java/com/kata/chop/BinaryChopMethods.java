@@ -1,7 +1,5 @@
 package com.kata.chop;
 
-import org.junit.Ignore;
-
 import java.util.Arrays;
 import java.util.SortedSet;
 
@@ -109,7 +107,6 @@ public class BinaryChopMethods {
     }
 
     //Day five implementation : use a SortedSet.
-    @Ignore
     public int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerSet)
             throws EmptyArrayException, ValueNotInArrayException {
         if(integerSet.size()==0){throw new EmptyArrayException();}

@@ -1,11 +1,14 @@
 package com.kata.dataMunging;
 
+import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Kata implementing football calculations
@@ -17,10 +20,12 @@ public class FootballData {
     public static final int GOALS_SCORED_FIELD = 7;
     public static final int GOALS_TAKEN_FIELD = 9;
 
+    private List<TeamScoreInfo> footballTeamsInfoList;
+
     private class TeamScoreInfo {
-        public String teamName;
-        public int goalsScored;
-        public int goalsTaken;
+        public final String teamName;
+        public final int goalsScored;
+        public final int goalsTaken;
 
         TeamScoreInfo(String teamName, int goalsScored, int goalsTaken){
             this.teamName = teamName;
@@ -28,43 +33,45 @@ public class FootballData {
             this.goalsTaken = goalsTaken;
         }
     }
-    List<TeamScoreInfo> footballTeamsInfoList = new ArrayList<>();
 
-    FootballData(String filePath) {
+    void processFootballData(String filePath) {
         try {
-            Stream<String> lines = Files.lines(Paths.get(filePath));
-            lines.forEach(this::footballInfoLineConsumer);
+            footballTeamsInfoList = footballInfoLineConsumer(Files.lines(Paths.get(filePath)));
         }
         catch(IOException exception){
-            System.out.println("IOException");
-            //TODO Find a way to handle exception properly
+            Throwables.propagate(exception);
         }
     }
 
-    void footballInfoLineConsumer(String footballInfoLine) {
-        String[] footballData = footballInfoLine.split("\\s+");
-        try {
-            footballTeamsInfoList.add(
-                    new TeamScoreInfo(
-                            footballData[FOOTBALL_TEAM_FIELD],
-                            Integer.parseInt(footballData[GOALS_SCORED_FIELD]),
-                            Integer.parseInt(footballData[GOALS_TAKEN_FIELD]))
-            );
-        }
-        catch (ArrayIndexOutOfBoundsException | NumberFormatException ignored){}
+    List<TeamScoreInfo> footballInfoLineConsumer(Stream<String> stream) {
+        return getRawStream(stream)
+                .map(strings -> new TeamScoreInfo(
+                        strings[FOOTBALL_TEAM_FIELD],
+                        Integer.parseInt(strings[GOALS_SCORED_FIELD]),
+                        Integer.parseInt(strings[GOALS_TAKEN_FIELD])))
+                .collect(toList());
+    }
+
+    private Stream<String[]> getRawStream(Stream<String> stream) {
+        return stream
+                // skip header
+                .skip(1)
+                // skip separation line
+                .filter(line -> !line.contains("-----"))
+                .map(s -> s.split("\\s+"));
     }
 
     String getTeamWithSmallestScoredTakenDifference(){
-        String smallestScoredTakenDifferenceTeam="";
-        int smallestScoredTakelDifference = Integer.MAX_VALUE;
-        for (TeamScoreInfo team : footballTeamsInfoList){
-            //System.out.println(team.teamName + " " + String.valueOf(Math.abs(team.goalsTaken - team.goalsScored)));
-            if(Math.abs(team.goalsTaken - team.goalsScored) < smallestScoredTakelDifference) {
-                smallestScoredTakenDifferenceTeam = team.teamName;
-                smallestScoredTakelDifference = Math.abs(team.goalsTaken - team.goalsScored);
-            }
-        }
-        return smallestScoredTakenDifferenceTeam;
+        return footballTeamsInfoList.stream()
+                .reduce((teamScoreInfo, teamScoreInfo2) -> {
+                    if (Math.abs(teamScoreInfo.goalsTaken - teamScoreInfo.goalsScored)
+                            < Math.abs(teamScoreInfo2.goalsTaken - teamScoreInfo2.goalsScored))
+                        return teamScoreInfo;
+
+                    return teamScoreInfo2;
+                })
+                .get()
+                .teamName;
     }
 
 }
