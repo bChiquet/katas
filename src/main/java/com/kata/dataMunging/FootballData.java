@@ -13,7 +13,6 @@ import static java.util.stream.Collectors.toList;
 /**
  * Kata implementing football calculations
  * codekata.com/kata/kata04-data-munging/
- * Basically a copy of WeatherData with name refactoring and minor changes
  **/
 public class FootballData {
     public static final int FOOTBALL_TEAM_FIELD = 2;

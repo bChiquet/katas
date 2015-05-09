@@ -1,21 +1,27 @@
 package com.kata.dataMunging;
 
+import com.google.common.io.Resources;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class WeatherDataTest {
-    public static final String PATH_TO_DATA = "C:\\Users\\Py\\IdeaProjects\\katas\\src\\test\\ressources\\weather.dat";
     WeatherData weatherData;
 
     @Before
     public void setUp() throws Exception{
-        weatherData = new WeatherData(PATH_TO_DATA);
+        weatherData = new WeatherData();
     }
 
     @Test
     public void should_return_day_with_minimum_temperature_spread() throws Exception{
-        Assert.assertEquals(14, weatherData.getDayWithMinimumTemperatureSpread());
-    }
+        //Given
+        weatherData.processWeatherData(Resources.getResource("weather.dat").getPath());
 
+        //When
+        int theDay = weatherData.getDayWithMinimumTemperatureSpread();
+
+        //Then
+        Assert.assertEquals(14, theDay);
+    }
 }

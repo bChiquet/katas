@@ -1,11 +1,12 @@
 package com.kata.dataMunging;
 
+import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Kata implementing weather calculations
@@ -17,9 +18,9 @@ public class WeatherData {
     public static final int MAX_TEMP_FIELD = 2;
 
     private class DayTemperatureInfo {
-        public int day;
-        public int minimumTemperature;
-        public int maximumTemperature;
+        public final int day;
+        public final int minimumTemperature;
+        public final int maximumTemperature;
 
         DayTemperatureInfo(int day, int minimumTemperature, int maximumTemperature){
             this.day = day;
@@ -29,40 +30,37 @@ public class WeatherData {
     }
     List<DayTemperatureInfo> temperatureInfoList = new ArrayList<>();
 
-    WeatherData(String filePath) {
+    public void processWeatherData(String filePath) {
         try {
-            Stream<String> lines = Files.lines(Paths.get(filePath));
-            lines.forEach(this::weatherDataLineConsumer);
+            Files.lines(Paths.get(filePath))
+                    .skip(2) //Skip the header lines
+                    .filter(line -> !line.contains("  mo")) //Skip the footer line with monthly figures.
+                    .forEach(this::weatherDataLineConsumer);
         }
         catch(IOException exception){
-            System.out.println("IOException");
-            //TODO Find a way to handle exception properly
+            Throwables.propagate(exception);
         }
     }
 
     void weatherDataLineConsumer(String weatherDataLine) {
         String[] weatherData = weatherDataLine.split("\\s+");
-        try {
-            temperatureInfoList.add(
-                    new DayTemperatureInfo(
-                            Integer.parseInt(weatherData[DAY_FIELD]),
-                            Integer.parseInt(weatherData[MIN_TEMP_FIELD].replace("*", "")),
-                            Integer.parseInt(weatherData[MAX_TEMP_FIELD].replace("*", "")))
-            );
-        }
-        catch (ArrayIndexOutOfBoundsException | NumberFormatException ignored){}
+        temperatureInfoList.add(
+                new DayTemperatureInfo(
+                        Integer.parseInt(weatherData[DAY_FIELD]),
+                        Integer.parseInt(weatherData[MIN_TEMP_FIELD].replace("*", "")),
+                        Integer.parseInt(weatherData[MAX_TEMP_FIELD].replace("*", "")))
+        );
     }
 
     int getDayWithMinimumTemperatureSpread(){
-        int lowestTemperatureSpreadDay=-1;
-        int lowestTemperatureSpread = Integer.MAX_VALUE;
-        for (DayTemperatureInfo day : temperatureInfoList){
-            if(day.maximumTemperature-day.minimumTemperature < lowestTemperatureSpread) {
-                lowestTemperatureSpreadDay = day.day;
-                lowestTemperatureSpread = day.maximumTemperature - day.minimumTemperature;
-            }
-        }
-        return lowestTemperatureSpreadDay;
+        return temperatureInfoList.stream()
+                .reduce((dayTemperatureInfo, dayTemperatureInfo2) -> {
+                    if ((dayTemperatureInfo.maximumTemperature - dayTemperatureInfo.minimumTemperature)
+                            < (dayTemperatureInfo2.maximumTemperature - dayTemperatureInfo2.minimumTemperature))
+                        return dayTemperatureInfo;
+                    return dayTemperatureInfo2;
+                })
+                .get()
+                .day;
     }
-
 }
