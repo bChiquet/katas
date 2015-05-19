@@ -160,4 +160,30 @@ public class BinaryChopMethodsTest {
     public void view_method_should_return_correct_value_4() throws Exception {
         assertEquals(1, binaryChopMethods.movingViewBinaryChop(2, new int[]{1, 2}));
     }
+
+    //Test for libraryBinaryChop
+    @Test
+    public void library_method_should_return_correct_value() throws Exception {
+        assertEquals(3, binaryChopMethods.libraryBinaryChop(4, new int[]{1, 2, 3, 4, 6, 9, 12, 25, 30, 35, 40, 50, 100}));
+        assertEquals(0, binaryChopMethods.libraryBinaryChop(1, new int[]{1, 2, 3, 5, 8, 13, 21}));
+        assertEquals(6, binaryChopMethods.libraryBinaryChop(21, new int[]{1, 2, 3, 5, 8, 13, 21}));
+        assertEquals(1, binaryChopMethods.libraryBinaryChop(2, new int[]{1, 2}));
+    }
+
+    @Test
+    public void library_method_should_fail_when_array_is_empty() throws Exception {
+        assertThatThrownBy(() -> binaryChopMethods.libraryBinaryChop(1, new int[]{}))
+                .isInstanceOf(BinaryChopMethods.EmptyArrayException.class);
+    }
+
+    @Test
+    public void library_method_should_fail_when_array_not_in_list() throws Exception {
+        assertThatThrownBy(() -> binaryChopMethods.libraryBinaryChop(4, new int[]{1, 2, 3}))
+                .isInstanceOf(BinaryChopMethods.ValueNotInArrayException.class);
+        assertThatThrownBy(() -> binaryChopMethods.libraryBinaryChop(0, new int[]{1, 2, 3}))
+                .isInstanceOf(BinaryChopMethods.ValueNotInArrayException.class);
+        assertThatThrownBy(() -> binaryChopMethods.libraryBinaryChop(3, new int[]{1, 2, 4}))
+                .isInstanceOf(BinaryChopMethods.ValueNotInArrayException.class);
+    }
+
 }

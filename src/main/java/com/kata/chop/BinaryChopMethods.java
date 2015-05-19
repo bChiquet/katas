@@ -106,15 +106,14 @@ public class BinaryChopMethods {
         throw new ValueNotInArrayException();
     }
 
-    //Day five implementation : use a SortedSet.
-    public int libraryBinaryChop(int integerLookedFor, SortedSet<Integer> integerSet)
+    //Day five implementation : use the library method implemented in Arrays.
+    public int libraryBinaryChop(int integerLookedFor, int[] integerArray)
             throws EmptyArrayException, ValueNotInArrayException {
-        if(integerSet.size()==0){throw new EmptyArrayException();}
-        if (integerSet.contains(integerLookedFor)) {
-            return integerSet.headSet(integerLookedFor).size();
-        }
-        else {
+        if(integerArray.length==0){throw new EmptyArrayException();}
+        int result = Arrays.binarySearch(integerArray, integerLookedFor);
+        if (result <0) {
             throw new ValueNotInArrayException();
         }
+        return result;
     }
 }
