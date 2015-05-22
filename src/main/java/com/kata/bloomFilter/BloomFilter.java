@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.BitSet;
+import java.util.PrimitiveIterator.OfInt;
 
 /**
  * Created by bec on 20/05/15.
@@ -13,11 +14,13 @@ import java.util.BitSet;
  */
 public class BloomFilter {
 
+    static final int KEY = 7;
+    static final int MULT = 61;
+
     BitSet filter;
 
     BloomFilter(int bitSize){
         filter = new BitSet(bitSize);
-        System.out.println(filter.size());
     }
 
     public void processWordFile(String filePath) {
@@ -29,10 +32,33 @@ public class BloomFilter {
 
     }
 
-    private void addWordToFilter(String word) {
-        //TODO create multiple hash values for each word
-        //TODO for each hash value, AND it with the bitmap
+    public void addWordToFilter(String word) {
+        filter.and(getHash(word));
     }
 
+    public boolean isPresent(String word) {
+        //Todo fix this method
+        BitSet wordXorFilter = getHash(word);
+        wordXorFilter.xor(filter);
+        return wordXorFilter.cardinality() == filter.cardinality() - getHash(word).cardinality();
+    }
 
+    private BitSet getHash(String word){
+        long[] hash = new long[] {hashMethod1(word), hashMethod2(word)};
+        return BitSet.valueOf(hash);
+    }
+
+    private long hashMethod1(String word) {
+        return 0;
+    }
+
+    private long hashMethod2(String word) {
+        OfInt wordCharIterator = word.chars().iterator();
+        int hash = KEY;
+        while (wordCharIterator.hasNext()) {
+            hash *= MULT;
+            hash += wordCharIterator.nextInt();
+        }
+        return hash;
+    }
 }
