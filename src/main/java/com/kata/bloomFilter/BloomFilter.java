@@ -18,9 +18,11 @@ public class BloomFilter {
     static final int MULT = 61;
 
     BitSet filter;
+    long filterSize;
 
     BloomFilter(int bitSize){
         filter = new BitSet(bitSize);
+        filterSize = bitSize;
     }
 
     public void processWordFile(String filePath) {
@@ -33,17 +35,21 @@ public class BloomFilter {
     }
 
     public void addWordToFilter(String word) {
-        filter.and(getHash(word));
+        filter.or(getHash(word));
     }
 
     public boolean isPresent(String word) {
-        //Todo fix this method
-        BitSet wordXorFilter = getHash(word);
-        wordXorFilter.xor(filter);
-        return wordXorFilter.cardinality() == filter.cardinality() - getHash(word).cardinality();
+
+        BitSet hashOrFilter = getHash(word);
+        BitSet hashXorFilter = getHash(word);
+        hashOrFilter.or(filter);
+        hashXorFilter.xor(filter);
+        return (hashXorFilter.cardinality() == filter.cardinality() - getHash(word).cardinality())
+                && (hashOrFilter.cardinality() == filter.cardinality());
     }
 
     private BitSet getHash(String word){
+        //TODO The hash method makes no sense. Fix it !
         long[] hash = new long[] {hashMethod1(word), hashMethod2(word)};
         return BitSet.valueOf(hash);
     }
