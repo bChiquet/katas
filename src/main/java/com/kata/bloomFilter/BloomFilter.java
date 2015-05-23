@@ -54,7 +54,7 @@ public class BloomFilter {
     /**
      * adds all the words contained in a file in the bloom filter.
      * The file format should be 1 word per line.
-     * @param filePath
+     * @param filePath containing the words to be added
      * @return false if one or more words hasn't been added because of lack of space, true otherwise.
      * The words will be added to the filter anyway
      */
@@ -74,7 +74,7 @@ public class BloomFilter {
     /**
      * Adds a word's hash in the bloom filter.
      * The word is trimmed before adding.
-     * @param word
+     * @param word to be added
      * @return false if the word hasn't been added because the filter can't contain more words, true otherwise
      * The word will be added to the filter anyway.
      */
@@ -86,7 +86,7 @@ public class BloomFilter {
 
     /**
      * checks if a word's hash is contained in the bloom filter.
-     * @param word
+     * @param word to be tested
      * @return true if the word's hash bits are all in the filter, false otherwise
      */
     public boolean contains(String word) {
