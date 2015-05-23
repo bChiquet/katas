@@ -1,8 +1,15 @@
 package com.kata.bloomFilter;
 
 import com.google.common.io.Resources;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -19,7 +26,7 @@ public class BloomFilterTest {
     @Before
     public void setUp() throws Exception {
         int numberOfWords = 140000;
-        double falsePositiveRate = 0.0001;
+        double falsePositiveRate = 0.001;
         bloomFilter = new BloomFilter(numberOfWords, falsePositiveRate);
     }
 
@@ -63,10 +70,30 @@ public class BloomFilterTest {
     }
 
     @Test
-    public void should_have_acceptable_false_positive_frequeny() {
+    public void should_have_acceptable_false_positive_frequeny() throws IOException {
         bloomFilter.addWordsFromFile(Resources.getResource("wordlist").getPath());
-        //TODO generate a couple thousand imaginary words not in wordlist and check if
-        // bloomfilter says they exist. Frequency should be inferior to :
-        System.out.println(ACCEPTABLE_FALSE_POSITIVE_FREQUENCY);
+        double measuredFalsePositiveFrequency = 0;
+        int NUMBER_OF_TESTS = 5000;
+        int SIZE_OF_TEST_STRING = 6;
+
+        //Create a dict containing the words added to the filter
+        NavigableSet<String> wordSet = new TreeSet<>();
+        Files.lines(Paths.get(Resources.getResource("wordlist").getPath()))
+                .map(String::trim)
+                .forEach(wordSet::add);
+
+        //Test random words
+        String randomWord;
+        for (int i=1;i<NUMBER_OF_TESTS;i++){
+            randomWord = RandomStringUtils.randomAlphabetic(SIZE_OF_TEST_STRING);
+            if (wordSet.contains(randomWord)) --i;
+            else {
+                wordSet.add(randomWord);
+                if (bloomFilter.contains(randomWord)) {
+                    measuredFalsePositiveFrequency += (double)1/NUMBER_OF_TESTS;
+                }
+            }
+        }
+        assertTrue(measuredFalsePositiveFrequency < ACCEPTABLE_FALSE_POSITIVE_FREQUENCY);
     }
 }

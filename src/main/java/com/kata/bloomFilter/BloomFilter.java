@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.BitSet;
 import java.util.Random;
 
-
 /**
  * Created by bec on 20/05/15.
  * Implements http://codekata.com/kata/kata05-bloom-filters/
