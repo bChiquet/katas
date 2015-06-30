@@ -95,6 +95,7 @@ public class BinaryChopMethodsTest {
         assertEquals(0, binaryChopMethods.movingViewBinaryChop(1, new int[]{1, 2, 3, 5, 8, 13, 21}));
         assertEquals(6, binaryChopMethods.movingViewBinaryChop(21, new int[]{1, 2, 3, 5, 8, 13, 21}));
         assertEquals(1, binaryChopMethods.movingViewBinaryChop(2, new int[]{1, 2}));
+        assertEquals(0, binaryChopMethods.movingViewBinaryChop(1, new int[]{1, 2}));
     }
 
     @Test

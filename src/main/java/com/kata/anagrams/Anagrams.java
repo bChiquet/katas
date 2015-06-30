@@ -19,25 +19,29 @@ public class Anagrams {
 
     /**
      * Loads a list of words on which to work from :
+     *
      * @param filePath the path of the file containing the words.
+     * @return this
      */
-    public void on(String filePath) {
+    public Anagrams on(String filePath) {
         try {
             wordList = Files.lines(Paths.get(filePath))
                     .map(String::trim)
                     .collect(toList());
-        }
-        catch (IOException e) {
-            Throwables.propagate(e);
+
+            return this;
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
         }
     }
 
     /**
      * returns a word's letters in sorted order.
+     *
      * @param word the word
      * @return a String containing the word's letters in sorted order.
      */
-    public static String getSortedString(String word){
+    private static String getSortedString(String word) {
         char[] wordChars = word.toCharArray();
         Arrays.sort(wordChars);
         return String.valueOf(wordChars);
@@ -49,10 +53,10 @@ public class Anagrams {
     public int getNumberOfAnagramSets() {
         Set<String> anagramSet = new TreeSet<>();
         Set<String> uniqueWordSet = new TreeSet<>();
-        wordList.forEach(word -> {
-            String sortedString = getSortedString(word);
-            if(!uniqueWordSet.add(sortedString)) anagramSet.add(sortedString);
-        });
+        wordList.stream()
+                .map(Anagrams::getSortedString)
+                .filter(s -> !uniqueWordSet.add(s))
+                .forEach(anagramSet::add);
         return anagramSet.size();
     }
 
@@ -67,16 +71,17 @@ public class Anagrams {
 
     /**
      * Builds a mapping of (sorted strings : anagram sets) from the wordList
+     *
      * @return the map.
      */
     public Map<String, Set<String>> getAnagramSets() {
         Map<String, Set<String>> anagramMap = new TreeMap<>();
-        wordList.forEach(word ->{
+        wordList.stream()
+                .forEach(word -> {
             String k = getSortedString(word);
             if (anagramMap.containsKey(k)) {
                 anagramMap.get(k).add(word);
-            }
-            else{
+            } else {
                 Set<String> l = new HashSet<>();
                 l.add(word);
                 anagramMap.put(k, l);
@@ -85,18 +90,4 @@ public class Anagrams {
         return anagramMap;
     }
 
-    //TODO find a way to binary search a string in a set of anagrams ?
-    //    public List<Anagram> getAnagramSets2(){
-    //        List<Anagram> anagramSet = new ArrayList<>();
-    //        wordList.forEach(word ->{
-    //            String sortedWord = getSortedString(word);
-    //            if (Collections.binarySearch(anagramSet, sortedWord)) {
-    //                anagramSet.
-    //            }
-    //            else {
-    //                anagramSet.add(new Anagram(word));
-    //            }
-    //        });
-    //        return anagramSet;
-    //    }
 }
