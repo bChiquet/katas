@@ -12,7 +12,6 @@ import java.util.Random;
  * Created by bec on 20/05/15.
  * Implements http://codekata.com/kata/kata05-bloom-filters/
  */
-
 public class BloomFilter {
     //The size of the bloom filter.
     private int filterSize;
@@ -35,12 +34,13 @@ public class BloomFilter {
     /**
      * Constructs a simple bloom filter.
      * The filter will automatically determine the bitmap size and the number of keys per word from :
-     *
      * @param expectedNumberOfElements    The number of words the bloom filter is expected to contain
      * @param acceptableFalsePositiveRate The acceptable error rate when the filter is full.
      *                                    The calculation is explained here : http://pages.cs.wisc.edu/~cao/papers/summary-cache/node8.html
      */
-    BloomFilter(int expectedNumberOfElements, double acceptableFalsePositiveRate) throws FilterCantBuildException {
+    //TODO TODO TODO aaaarghhhhhhhhhh!
+    BloomFilter(int expectedNumberOfElements, double acceptableFalsePositiveRate)
+            throws FilterCantBuildException {
         int multiplier = 0;
         for (int i = 2; i + 1 < Integer.MAX_VALUE / expectedNumberOfElements; i++) {
             if (Math.pow(MAGIC_NUMBER, (double) i) < acceptableFalsePositiveRate) {
@@ -61,7 +61,6 @@ public class BloomFilter {
     /**
      * adds all the words contained in a file in the bloom filter.
      * The file format should be 1 word per line.
-     *
      * @param filePath containing the words to be added
      * @return false if one or more words hasn't been added because of lack of space, true otherwise.
      * The words will be added to the filter anyway
@@ -80,7 +79,6 @@ public class BloomFilter {
     /**
      * Adds a word's hash in the bloom filter.
      * The word is trimmed before adding.
-     *
      * @param word to be added
      * @return false if the word hasn't been added because the filter can't contain more words, true otherwise
      * The word will be added to the filter anyway.
@@ -93,7 +91,6 @@ public class BloomFilter {
 
     /**
      * checks if a word's hash is contained in the bloom filter.
-     *
      * @param word to be tested
      * @return true if the word's hash bits are all in the filter, false otherwise
      */

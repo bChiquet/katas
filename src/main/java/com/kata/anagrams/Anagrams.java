@@ -78,6 +78,7 @@ public class Anagrams {
         Map<String, Set<String>> anagramMap = new TreeMap<>();
         wordList.stream()
                 .forEach(word -> {
+                    //TODO trim this blob
             String k = getSortedString(word);
             if (anagramMap.containsKey(k)) {
                 anagramMap.get(k).add(word);
@@ -89,5 +90,4 @@ public class Anagrams {
         });
         return anagramMap;
     }
-
 }

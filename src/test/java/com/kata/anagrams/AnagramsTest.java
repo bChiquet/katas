@@ -1,7 +1,7 @@
 package com.kata.anagrams;
 
+import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
-import org.assertj.core.util.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,19 +47,19 @@ public class AnagramsTest {
 
     @Test
     public void should_return_anagram_sets(){
-        Set<String> anagram = Sets.newLinkedHashSet("boaster", "boaters", "borates");
-        Set<String> anagram2 = Sets.newLinkedHashSet("pates", "peats", "septa", "tapes",
+        Set<String> anagram = Sets.newHashSet("boaster", "boaters", "borates");
+        Set<String> anagram2 = Sets.newHashSet("pates", "peats", "septa", "tapes",
                 "spate", "paste", "tepas");
-        Set<String> anagram3 = Sets.newLinkedHashSet("pictures", "cuprites", "crepitus",
+        Set<String> anagram3 = Sets.newHashSet("pictures", "cuprites", "crepitus",
                 "piecrust");
-        Set<String> anagram4 = Sets.newLinkedHashSet("punctilio", "unpolitic");
-        Set<String> anagram5 = Sets.newLinkedHashSet("sunders", "undress");
-        Set<String> anagram6 = Sets.newLinkedHashSet("fresher", "refresh");
-        Set<String> anagram7 = Sets.newLinkedHashSet("inlets", "enlist", "listen", "silent");
-        Set<String> anagram8 = Sets.newLinkedHashSet("kinship", "pinkish");
-        Set<String> anagram9 = Sets.newLinkedHashSet("sinks", "skins");
-        Set<String> anagram10 = Sets.newLinkedHashSet("knits", "stink");
-        Set<String> anagram11 = Sets.newLinkedHashSet("sort", "rots");
+        Set<String> anagram4 = Sets.newHashSet("punctilio", "unpolitic");
+        Set<String> anagram5 = Sets.newHashSet("sunders", "undress");
+        Set<String> anagram6 = Sets.newHashSet("fresher", "refresh");
+        Set<String> anagram7 = Sets.newHashSet("inlets", "enlist", "listen", "silent");
+        Set<String> anagram8 = Sets.newHashSet("kinship", "pinkish");
+        Set<String> anagram9 = Sets.newHashSet("sinks", "skins");
+        Set<String> anagram10 = Sets.newHashSet("knits", "stink");
+        Set<String> anagram11 = Sets.newHashSet("sort", "rots");
 
         //before
         anagrams.on(Resources.getResource("smallAnagramList").getPath());
