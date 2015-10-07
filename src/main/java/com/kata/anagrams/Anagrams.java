@@ -77,17 +77,12 @@ public class Anagrams {
     public Map<String, Set<String>> getAnagramSets() {
         Map<String, Set<String>> anagramMap = new TreeMap<>();
         wordList.stream()
-                .forEach(word -> {
-                    //TODO trim this blob
-            String k = getSortedString(word);
-            if (anagramMap.containsKey(k)) {
-                anagramMap.get(k).add(word);
-            } else {
-                Set<String> l = new HashSet<>();
-                l.add(word);
-                anagramMap.put(k, l);
-            }
-        });
+                .map(Anagrams::getSortedString)
+                .filter(s -> !anagramMap.containsKey(s))
+                .forEach(key -> { anagramMap.put(key, new HashSet<>()); });
+        wordList.stream()
+                .forEach(word -> {anagramMap.get(getSortedString(word)).add(word); });
+
         return anagramMap;
     }
 }
